@@ -27,7 +27,13 @@ def performSearch(searchObj):
     for file, count in results.items():
         #after search @Package, then conduct another search using the filename
         #to get the version number of the Package
-        print 'File: ', file, ' Found entries:' , count
+        with open(file, 'r') as searchfile:
+            for line in searchfile:
+                if search in line:
+                    print line
+                if version in line:
+                    print line
+
 
 
 
