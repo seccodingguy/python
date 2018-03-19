@@ -4,7 +4,7 @@ Are you looking for a way to periodically check the external IP address of the r
 
 Prerequisites:
 - Python 2.7.x
-- OpenVPN installed and configured
+- OpenVPN installed and configured (Here's an excellent tutorial: https://www.digitalocean.com/community/tutorials/how-to-set-up-an-openvpn-server-on-ubuntu-16-04)
 - Install the listed modules from the import statements
 - SMTP information (Outlook is included as the default)
 
