@@ -1,6 +1,6 @@
 # External IP Address Checker
 
-Are you looking for a way to periodically check the external IP address of the router in your home provided by your ISP, however, you don't want to pay for this service? Well, look not further! The External IP Address Checker will keep you updated and connected through your VPN even if the IP Address changes while you're on the road!
+Are you looking for a way to periodically check the external IP address of the router in your home provided by your ISP, however, you don't want to pay for this service? Well, look no further! The External IP Address Checker will keep you updated and connected through your VPN even if the IP Address changes while you're on the road!
 
 Prerequisites:
 - OpenVPN installed and configured
