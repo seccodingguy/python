@@ -3,6 +3,7 @@
 Are you looking for a way to periodically check the external IP address of the router in your home provided by your ISP, however, you don't want to pay for this service? Well, look no further! The External IP Address Checker will keep you updated and connected through your VPN even if the IP Address changes while you're on the road!
 
 Prerequisites:
+- Python 2.7.x
 - OpenVPN installed and configured
 - Install the listed modules from the import statements
 - SMTP information (Outlook is included as the default)
