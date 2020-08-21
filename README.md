@@ -4,7 +4,7 @@ Within these walls you'll find various Python-based utilities that I have writte
 
 # jsontocsv
 
-<p>The <i>jsontocsv</i> folder is a Python GUI that will take in a parameter of the JSON element to parse and will then output to the user-specified CSV file. This is a quick and easy way to convert JSON at a click of a button!</p>
+<p>The <i>jsontocsv</i> folder includes a Python script that executes as a GUI that will take in a parameter of the JSON element to parse and will then output to the user-specified CSV file. This is a quick and easy way to convert JSON at a click of a button!</p>
 
 # search
 
