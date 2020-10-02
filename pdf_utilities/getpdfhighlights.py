@@ -2,6 +2,11 @@
 # based on https://stackoverflow.com/a/62859169/562769
 
 import os
+
+import os.path
+from os import path
+
+import sys
 import tkinter as tk
 from tkinter import filedialog
 from tkinter import messagebox
@@ -30,35 +35,55 @@ def handle_page(page):
     wordlist.sort(key=lambda w: (w[3], w[0]))  # ascending y, then x
 
     highlights = []
+    counter = 0
     annot = page.firstAnnot
     while annot:
         if annot.type[0] == 8:
+            highlight = _parse_highlight(annot, wordlist)
+            comment = annot.info["content"]
             highlights.append(_parse_highlight(annot, wordlist))
+            highlights.append(comment)
         annot = annot.next
     return highlights
 
 def main(filepath: str) -> List:
-    #createGUI()
+    created = False
+    if path.isfile(inputcsvtxt.get("1.0","end-1c")):
+        data_file = open(inputcsvtxt.get("1.0","end-1c"), 'a', encoding='utf-8')
+    else:
+        data_file = open(inputcsvtxt.get("1.0","end-1c"), 'w', encoding='utf-8')
+        created = True
+        
+
+    csv_writer = csv.writer(data_file)
+    
+    if created:
+        header = ["Comment","Note","File"]
+        csv_writer.writerow(header)
+
     doc = fitz.open(filepath)
-
-    highlights = []
+    
     for page in doc:
-        highlights += handle_page(page)
-
-    return highlights
+        references = handle_page(page)
+        length = len(references)
+        i = 0
+        if length > 0:
+            while i < (length-1):
+                csv_writer.writerow([references[i].encode('utf-8'),references[i+1].encode('utf-8'),filepath.encode('utf-8')])
+                i += 2
+       
 
 def getPDFFiles(rootpath: str):
     print("Saving to " + inputcsvtxt.get("1.0","end-1c"))
     for subdir, dirs, files in os.walk(rootpath):
         for file in files:
-            #print os.path.join(subdir, file)
             filepath = subdir + os.sep + file
-
-            if filepath.endswith(".pdf"):
+            if filepath.endswith(".pdf") or filepath.endswith(".PDF"):
                 print (filepath)
-                print(main(filepath))
+                main(filepath)
     print("Done!")
-                
+
+
 def getPDFilePath():
     import_file_path = filedialog.askdirectory()
     inputtxt.insert("end-1c",import_file_path)
@@ -70,8 +95,8 @@ def exitApplication():
 
 def saveToCSVFile():
     export_file_path = filedialog.asksaveasfilename(defaultextension='.csv')
-    print(export_file_path)
     inputcsvtxt.insert("end-1c",export_file_path)
+    print(export_file_path)
     getPDFFiles(inputtxt.get("1.0","end-1c"))
 
 
@@ -96,6 +121,3 @@ canvas1.create_window(200,110,window=inputcsvtxt)
 
 root.mainloop()
 
-#if __name__ == "__main__":
-#    print(main("C:\\Users\\mark_\\Dropbox\\Doctoral Studies\\Thesis\\Literature\\Static_Analysis\\SOSRepair-Expressive Semantic Search for Real-World Program Repair.pdf"))
-    
