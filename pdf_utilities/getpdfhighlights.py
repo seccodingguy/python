@@ -15,6 +15,9 @@ import csv
 import fitz  # install with 'pip install pymupdf'
 
 root= tk.Tk()
+replaceCSV = tk.IntVar()
+
+replace = False
 
 def _parse_highlight(annot: fitz.Annot, wordlist: List[Tuple[float, float, float, float, str, int, int, int]]) -> str:
     points = annot.vertices
@@ -47,9 +50,14 @@ def handle_page(page):
     return highlights
 
 def main(filepath: str) -> List:
+    global replace
     created = False
     if path.isfile(inputcsvtxt.get("1.0","end-1c")):
-        data_file = open(inputcsvtxt.get("1.0","end-1c"), 'a', encoding='utf-8')
+        if replace:
+            data_file = open(inputcsvtxt.get("1.0","end-1c"), 'w', encoding='utf-8')
+            replace = False
+        else:
+            data_file = open(inputcsvtxt.get("1.0","end-1c"), 'a', encoding='utf-8')
     else:
         data_file = open(inputcsvtxt.get("1.0","end-1c"), 'w', encoding='utf-8')
         created = True
@@ -73,8 +81,9 @@ def main(filepath: str) -> List:
                 i += 2
        
 
-def getPDFFiles(rootpath: str):
+def getPDFFiles():
     print("Saving to " + inputcsvtxt.get("1.0","end-1c"))
+    rootpath = inputtxt.get("1.0","end-1c")
     for subdir, dirs, files in os.walk(rootpath):
         for file in files:
             filepath = subdir + os.sep + file
@@ -97,9 +106,15 @@ def saveToCSVFile():
     export_file_path = filedialog.asksaveasfilename(defaultextension='.csv')
     inputcsvtxt.insert("end-1c",export_file_path)
     print(export_file_path)
-    getPDFFiles(inputtxt.get("1.0","end-1c"))
+    #getPDFFiles(inputtxt.get("1.0","end-1c"))
 
-
+def setReplaceVariable():
+    global replace
+    if replaceCSV.get() == 1:
+        replace = True
+    else:
+        replace = False
+        
 canvas1 = tk.Canvas(root, width = 300, height = 300, bg = 'lightsteelblue2', relief = 'raised')
 canvas1.pack()
 
@@ -118,6 +133,12 @@ browseButton_CSV = tk.Button(text="CSV Output", command=saveToCSVFile, bg='green
 canvas1.create_window(60, 110, window=browseButton_CSV)
 inputcsvtxt = tk.Text(root, height = 1, width = 20, bg = "light yellow") 
 canvas1.create_window(200,110,window=inputcsvtxt)
+
+browseButton_CSV = tk.Button(text="Create CSV", command=getPDFFiles, bg='green', fg='white', font=('helvetica', 10, 'bold'))
+canvas1.create_window(100, 180, window=browseButton_CSV)
+
+c1 = tk.Checkbutton(root, text='Replace CSV?', variable=replaceCSV, onvalue=1, offvalue=0, command=setReplaceVariable)
+canvas1.create_window(100,140,window=c1)
 
 root.mainloop()
 
