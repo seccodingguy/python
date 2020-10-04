@@ -56,6 +56,7 @@ def main(filepath: str) -> List:
         if replace:
             data_file = open(inputcsvtxt.get("1.0","end-1c"), 'w', encoding='utf-8')
             replace = False
+            created = True
         else:
             data_file = open(inputcsvtxt.get("1.0","end-1c"), 'a', encoding='utf-8')
     else:
@@ -66,20 +67,29 @@ def main(filepath: str) -> List:
     csv_writer = csv.writer(data_file)
     
     if created:
-        header = ["Comment","Note","File"]
+        header = ["Title","Comment","Note","References","File"]
         csv_writer.writerow(header)
 
     doc = fitz.open(filepath)
-    
+    title = doc.metadata["title"]
+
+    if title == None:
+        title = "Missing Title in Metadata"
+        
     for page in doc:
         references = handle_page(page)
         length = len(references)
         i = 0
         if length > 0:
             while i < (length-1):
-                csv_writer.writerow([references[i].encode('utf-8'),references[i+1].encode('utf-8'),filepath.encode('utf-8')])
+                csv_writer.writerow([title.encode('utf-8'),references[i].encode('utf-8'),references[i+1].encode('utf-8')," ",filepath.encode('utf-8')])
                 i += 2
-       
+        length = len(page.searchFor("References",hit_max=16))
+        if length > 0:
+            referenceText = page.getText("text")
+            if referenceText == None:
+                referenceText = "NOT FOUND"
+            csv_writer.writerow([title.encode('utf-8')," "," ",referenceText.encode('utf-8'),filepath.encode('utf-8')])
 
 def getPDFFiles():
     print("Saving to " + inputcsvtxt.get("1.0","end-1c"))
